@@ -670,45 +670,27 @@ async function printToThermalPrinter(content, copy) {
                     }
                     
                     @page {
-                        size: 80mm auto;
+                        size: auto;
                         margin: 0;
                     }
                     
                     body {
-                        font-family: 'Courier New', monospace;
-                        font-size: 11px;
-                        width: 80mm;
-                        margin: 0 auto;
-                        padding: 5mm;
+                        font-family: 'Courier New', Courier, monospace;
+                        font-size: 12px;
+                        font-weight: 600;
+                        width: 100%;
+                        margin: 0;
+                        padding: 5px;
                         background: white;
                         color: black;
                     }
                     
                     pre {
-                        font-family: 'Courier New', monospace;
-                        font-size: 11px;
-                        white-space: pre-wrap;
-                        word-wrap: break-word;
+                        font-family: 'Courier New', Courier, monospace;
+                        font-size: 12px;
+                        white-space: pre;
                         margin: 0;
-                        line-height: 1.3;
-                    }
-                    
-                    @media print {
-                        body {
-                            width: 80mm;
-                            padding: 2mm;
-                        }
-                        
-                        pre {
-                            font-size: 10px;
-                        }
-                    }
-                    
-                    @media screen {
-                        body {
-                            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-                            margin-top: 10px;
-                        }
+                        line-height: 1.2;
                     }
                 </style>
             </head>
