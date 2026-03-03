@@ -4,7 +4,7 @@
 
 // URL del Web App de Google Apps Script (REEMPLAZAR CON LA URL REAL)
 const SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbxAKxDlNu8bWmg3nZb9WqSKsJtoGiCCxmWDwr_YKI5tY8CosQpdDNQ5dawRon8j9dySHg/exec";
+  "https://script.google.com/macros/s/AKfycbzpqsECEhnGXkDUBf5QjUi5MBZ3MNqlIJ3QVj_aBqv04aljOd4pFLKgZQA9oUNPdRr-KQ/exec";
 
 // Estado de la aplicación
 let state = {
@@ -117,6 +117,11 @@ function setupEventListeners() {
   document
     .getElementById("btnNewCategory")
     .addEventListener("click", () => openCategoryModal());
+    
+  // Administración - Borrar todas las órdenes
+  document
+    .getElementById("btnDeleteAllOrders")
+    .addEventListener("click", deleteAllOrders);
 
   // Formularios
   document
@@ -1235,6 +1240,32 @@ async function deleteOrderAdmin(orderNumber, rowIndex) {
   if (result && result.success) {
     loadOrdersAdmin();
     showToast("Orden eliminada", "success");
+  }
+}
+
+// Eliminar TODAS las órdenes
+async function deleteAllOrders() {
+  // Primera advertencia
+  if (!confirm("⚠️ ADVERTENCIA CRÍTICA ⚠️\n\n¿Estás seguro de que deseas ELIMINAR TODO el historial de órdenes?\n\nEsta acción borrará todas las ventas de la base de datos y NO se puede deshacer.")) {
+    return;
+  }
+
+  // Segunda confirmación de seguridad
+  if (!confirm("¿Realmente estás seguro?\n\nSe perderán todos los registros de ventas permanentemente.")) {
+    return;
+  }
+
+  showLoader(true);
+  const result = await fetchData("deleteAllOrders");
+  showLoader(false);
+
+  if (result && result.success) {
+    loadOrdersAdmin();
+    showToast("Historial de órdenes eliminado completamente", "success");
+    // Actualizar el total visual a 0
+    document.getElementById("ordersTotalDisplay").textContent = "$0";
+  } else {
+    showToast("Error al eliminar el historial", "error");
   }
 }
 
