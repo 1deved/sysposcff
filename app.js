@@ -166,6 +166,19 @@ function setupEventListeners() {
   });
 }
 
+const DEFAULT_LOCAL_TIP = 2000;
+
+function setDefaultTipForOrderType(orderType) {
+  const addTip = document.getElementById("addTip");
+  const tipAmount = document.getElementById("tipAmount");
+  const tipField = document.getElementById("tipField");
+  const isLocal = orderType === "local";
+
+  addTip.checked = isLocal;
+  tipAmount.value = isLocal ? DEFAULT_LOCAL_TIP : "";
+  tipField.style.display = isLocal ? "block" : "none";
+}
+
 // ===================================
 // NAVEGACIÓN Y VISTAS
 // ===================================
@@ -405,9 +418,7 @@ function clearCart() {
     document.querySelector('input[name="orderType"][value="local"]').checked = true;
     document.getElementById("deliveryFields").style.display = "none";
     document.querySelector('input[name="paymentMethod"][value="Efectivo"]').checked = true;
-    document.getElementById("addTip").checked = false;
-    document.getElementById("tipAmount").value = "";
-    document.getElementById("tipField").style.display = "none";
+    setDefaultTipForOrderType("local");
 
     renderCart();
     showToast("Orden limpiada", "success");
@@ -530,9 +541,7 @@ async function processOrder() {
     document.getElementById("customerName").value = "";
     document.getElementById("deliveryAddress").value = "";
     document.getElementById("deliveryCharge").value = "";
-    document.getElementById("addTip").checked = false;
-    document.getElementById("tipAmount").value = "";
-    document.getElementById("tipField").style.display = "none";
+    setDefaultTipForOrderType(orderType);
     renderCart();
 
     showToast(`Orden #${result.orderNumber} procesada`, "success");
@@ -1280,8 +1289,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       const deliveryFields = document.getElementById("deliveryFields");
       deliveryFields.style.display =
         e.target.value === "domicilio" ? "block" : "none";
+      setDefaultTipForOrderType(e.target.value);
     });
   });
+
+  const initialOrderType = document.querySelector(
+    'input[name="orderType"]:checked'
+  ).value;
+  setDefaultTipForOrderType(initialOrderType);
 
   // Vista por defecto
   switchView("orden");
