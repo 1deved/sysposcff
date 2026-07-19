@@ -13,6 +13,7 @@ let state = {
   cart: [],
   currentView: "orden",
   selectedCategory: "all",
+  productSearch: "",
   tempProduct: null,
   isAdminLoggedIn: false,
   currentUser: null,
@@ -164,6 +165,11 @@ function setupEventListeners() {
       document.getElementById("tipAmount").value = "";
     }
   });
+
+  document.getElementById("productSearch").addEventListener("input", (e) => {
+    state.productSearch = e.target.value;
+    renderProducts();
+  });
 }
 
 const DEFAULT_LOCAL_TIP = 2000;
@@ -295,14 +301,26 @@ async function loadProducts() {
 
 function renderProducts() {
   const grid = document.getElementById("productsGrid");
-  const filteredProducts =
-    state.selectedCategory === "all"
-      ? state.products
-      : state.products.filter((p) => p.category === state.selectedCategory);
+  const normalizeSearch = (text) =>
+    String(text || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .trim();
+  const searchTerm = normalizeSearch(state.productSearch);
+  const filteredProducts = state.products.filter((product) => {
+    const matchesCategory =
+      state.selectedCategory === "all" ||
+      product.category === state.selectedCategory;
+    const searchableText = normalizeSearch(
+      `${product.name} ${product.description || ""}`
+    );
+    return matchesCategory && searchableText.includes(searchTerm);
+  });
 
   if (filteredProducts.length === 0) {
     grid.innerHTML =
-      '<div class="empty-cart"><p>📦</p><span>No hay productos disponibles</span></div>';
+      '<div class="empty-cart"><p>🔍</p><span>No se encontraron productos</span></div>';
     return;
   }
 
