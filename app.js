@@ -4,7 +4,7 @@
 
 // URL del Web App de Google Apps Script (REEMPLAZAR CON LA URL REAL)
 const SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbzRJNCtCO9A-BYj_NKpcCWs6ndIrgnnL2pZaSIu4YqRoItCXaRvVWBThsMeGU-JO3AL6w/exec";
+  "https://script.google.com/macros/s/AKfycbxViMoOXmq-d2i_Fga8ZZL5MhixJHRWAOPD4NUXTPBfbWsFOXMPKm8R_DvFdwda3abc/exec";
 
 // Estado de la aplicación
 let state = {
